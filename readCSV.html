@@ -8,15 +8,40 @@
 <body>
 <script type="text/javascript">
 
+var parseTime = d3.timeParse("%d-%b-%y");
+
 d3.csv("./stocks.csv", 
 
 	function(data)
-	{
-		console.log(data);
+	{	
+		data.forEach(
+			function(d)
+			{
+				d.date = parseTime(d.date);
+				d.close = +d.close;
+				// console.log(d);
+			}
+		);
+
+		var ctr1 = d3.select("body").append("svg").attr("width", 800).attr("width", 600);
+		var valueline = d3.line().
+		x(
+			function(d)
+			{
+				return x(d.date);
+			}).
+		y(
+			function(d)
+			{
+				return y(d.close);
+			});
+
+		ctr1.append("path").data([data]).attr("class", "line").attr("d", valueline);
 	}
 
 );
 
 </script>
+<path class = "line"></path>
 </body>
 </html>
